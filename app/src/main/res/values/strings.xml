@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Weekly Planner</string>
+    <string-array name="list_items">
+
+    </string-array>
+    <string-array name="list_items_days">
+
+    </string-array>
+</resources>
