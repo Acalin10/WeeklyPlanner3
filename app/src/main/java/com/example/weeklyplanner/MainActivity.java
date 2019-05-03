@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> list_items;
     ArrayList<String> list_items_days;
     ImageButton delete_item;
+    int fred;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
     {
