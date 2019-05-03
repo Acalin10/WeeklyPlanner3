@@ -1,20 +1,31 @@
 package com.example.weeklyplanner;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     ListView shop_list;
-    String[] list_items;
-    String[] list_items_days;
-
+    ArrayList<String> list_items;
+    ArrayList<String> list_items_days;
+    ImageButton delete_item;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
     {
@@ -43,9 +54,14 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Resources res = getResources();
         shop_list = findViewById(R.id.shop_list);
-        list_items = res.getStringArray(R.array.list_items);
-        list_items_days = res.getStringArray(R.array.list_items_days);
+
+            list_items = new ArrayList<String>();
+            list_items_days = new ArrayList<String>();
+
+        ItemAdapter itemAdapter = new ItemAdapter(this, list_items,list_items_days,delete_item);
+        shop_list.setAdapter(itemAdapter);
   //      shop_list.setAdapter(new ArrayAdapter<String>(this, R.layout.shop_list_view,list_items));
     }
+
 
 }
