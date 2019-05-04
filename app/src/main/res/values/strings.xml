@@ -1,11 +1,4 @@
 <resources>
     <string name="app_name">Weekly Planner</string>
-    <string-array name="list_items">
-       <item>potatoes</item>
-        <item>minced meat</item>
-    </string-array>
-    <string-array name="list_items_days">
-        <item>Mon</item>
-        <item>Mon</item>
-    </string-array>
+
 </resources>
