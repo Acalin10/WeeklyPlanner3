@@ -1,23 +1,24 @@
 package com.example.weeklyplanner;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.example.weeklyplanner.ListItemAdapter.OnItemClickCrossListener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,16 +27,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ShoppingList extends AppCompatActivity {
     ListView shop_list;
     ArrayList<String> list_items;
     ArrayList<String> list_items_days;
-    ImageButton delete_item;
     File shopping_list;
     File shopping_list_days;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,7 +42,9 @@ public class ShoppingList extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.list_nav_back:
-
+                    Intent i1 = new Intent(ShoppingList.this, MainScreen.class);
+                    startActivity(i1);
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                     break;
                 case R.id.list_nav_add:
                     AlertDialog alertDialog = new AlertDialog.Builder(ShoppingList.this).create();
@@ -52,6 +52,8 @@ public class ShoppingList extends AppCompatActivity {
                     alertDialog.setMessage("Write the item below and click ok");
                     final EditText input;
                     input = new EditText(getApplicationContext());
+                    alertDialog.getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                     alertDialog.setView(input);
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                             new DialogInterface.OnClickListener() {
@@ -66,13 +68,18 @@ public class ShoppingList extends AppCompatActivity {
                     alertDialog.show();
                     break;
                 case R.id.list_nav_done:
-
+                    Intent i2= new Intent(ShoppingList.this, MainScreen.class);
+                    startActivity(i2);
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                     break;
             }
             return false;
         }
     };
-
+    public void finish(){
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +90,12 @@ public class ShoppingList extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.List_Nav);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        shop_list = findViewById(R.id.shop_list);
-        ListItemAdapter itemAdapter = new ListItemAdapter(this, list_items,list_items_days,delete_item,shopping_list,shopping_list_days);
+        shop_list =  findViewById(R.id.shop_list);
+        final ListItemAdapter itemAdapter = new ListItemAdapter(this, list_items,list_items_days,shopping_list,shopping_list_days);
         shop_list.setAdapter(itemAdapter);
+        shop_list.setOnItemClickListener(new OnItemClickCrossListener());
+   }
 
-    }
     public static void saveArray(ArrayList<String> arrayList, File file){
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -101,10 +109,10 @@ public class ShoppingList extends AppCompatActivity {
 
         }
     }
+
     public void onResume(){
         super.onResume();
-        ListItemAdapter itemAdapter = new ListItemAdapter(this,list_items,list_items_days,delete_item,shopping_list,shopping_list_days);
-        shop_list.setAdapter(itemAdapter);
+
     }
     public static ArrayList<String> loadArray(File file){
         ArrayList<String> arrayList = new ArrayList<String>();

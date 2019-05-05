@@ -1,11 +1,15 @@
 package com.example.weeklyplanner;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -15,7 +19,6 @@ public class ListItemAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<String> list_items;
     private ArrayList<String> list_items_days;
-    private ImageButton delete_item;
     private File saveshop;
     private File savedays;
 
@@ -62,13 +65,13 @@ public class ListItemAdapter extends BaseAdapter {
         this.savedays = savedays;
     }
 
-    public ListItemAdapter(Context context, ArrayList<String> i, ArrayList<String> j, ImageButton b, File shopping_list, File shopping_list_days){
+    public ListItemAdapter(Context context, ArrayList<String> i, ArrayList<String> j, File shopping_list, File shopping_list_days){
         setList_items(i);
         setList_items_days(j);
-        delete_item = b;
         setmInflater((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         setSavedays(shopping_list_days);
         setSaveshop(shopping_list);
+
     }
     @Override
 
@@ -103,11 +106,34 @@ public class ListItemAdapter extends BaseAdapter {
                 ShoppingList.saveArray(getList_items_days(),getSavedays());
             }
         });
+
+
         String name = getList_items().get(position);
         String day = getList_items_days().get(position);
         nameTextView.setText(name);
         dayTextView.setText(day);
-
         return v;
     }
-}
+   public static class OnItemClickCrossListener implements OnItemClickListener {
+           @Override
+           public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+               ListView lv = (ListView) a;
+               if (lv.isItemChecked(position)) {
+                   TextView row1 = (TextView) v.findViewById(R.id.item_name);
+                   TextView row2 = (TextView) v.findViewById(R.id.item_day);
+                   row1.setPaintFlags(row1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                   row2.setPaintFlags(row2.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+               }
+               else {
+                   TextView row1 = (TextView) v.findViewById(R.id.item_name);
+                   TextView row2 = (TextView) v.findViewById(R.id.item_day);
+                   row1.setPaintFlags(row1.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG);
+                   row2.setPaintFlags(row2.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG);
+               }
+
+
+           }
+       }
+   }
+
+
